@@ -143,7 +143,7 @@ class HBNBCommand(cmd.Cmd):
                     arg[1] = float(arg[1])
                 elif arg[1].isdigit() and HBNBCommand.types[arg[0]] is int:
                     arg[1] = int(arg[1])
-                if type(arg[1]) is HBNBCommand.types[arg[0]]:
+                if type(arg[1]) is not HBNBCommand.types[arg[0]]:
                     continue
                 setattr(new_instance, arg[0], arg[1])
         storage.save()
