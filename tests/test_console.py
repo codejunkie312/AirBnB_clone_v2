@@ -93,6 +93,31 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['name'], 'New York')
+    
+    def test_create_kwargs_types(self):
+        """ """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Place city_id=\"0001\"')
+            self.assertTrue(os.path.exists('file.json'))
+            output = f.getvalue().strip()
+            with open('file.json', 'r') as f:
+                file = json.load(f)
+                self.assertTrue('Place.' + output in file.keys())
+                self.assertEqual(type(file['Place.' + output]['city_id']), str)
+                self.assertEqual(file['Place.' + output]['city_id'], '0001')
+
+    def test_create_kwargs_multiple(self):
+        """ """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Place name=\"California\" city_id=\"0001\"')
+            self.assertTrue(os.path.exists('file.json'))
+            output = f.getvalue().strip()
+            with open('file.json', 'r') as f:
+                file = json.load(f)
+                self.assertTrue('Place.' + output in file.keys())
+                self.assertEqual(file['Place.' + output]['name'], 'California')
+                self.assertEqual(file['Place.' + output]['city_id'], '0001')
+
                 
 
         
