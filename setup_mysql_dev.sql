@@ -1,4 +1,4 @@
--- prepares a MySQL server for the project
+-- prepares a MySQL server for the project development
 -- by creating a database and a user
 -- and granting the user all privileges on the database
 -- and flushing privileges
