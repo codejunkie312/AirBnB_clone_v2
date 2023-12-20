@@ -2,10 +2,17 @@
 """ """
 import unittest
 import os
-import sys
 import json
 from console import HBNBCommand
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 from unittest.mock import patch
+from models import storage
 from io import StringIO
 
 
@@ -37,6 +44,8 @@ class test_console(unittest.TestCase):
             with open('file.json', 'r') as f:
                 file = json.load(f)
                 self.assertTrue('BaseModel.' + output in file.keys())
+            instance = storage.all()['BaseModel.' + output]
+            self.assertIsInstance(instance, BaseModel)
 
     def test_create_kwargs_correct(self):
         """ """
@@ -48,6 +57,8 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['name'], 'California')
+            instance = storage.all()['Place.' + output]
+            self.assertIsInstance(instance, Place)
 
     def test_create_kwargs_incorrect(self):
         """ """
@@ -60,6 +71,8 @@ class test_console(unittest.TestCase):
                 self.assertTrue('Place.' + output in file.keys())
                 with self.assertRaises(KeyError):
                     file['Place.' + output]['amenity_ids']
+            instance = storage.all()['Place.' + output]
+            self.assertIsInstance(instance, Place)
 
     def test_create_kwargs_int(self):
         """ """
@@ -71,6 +84,8 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['number_rooms'], 3)
+            instance = storage.all()['Place.' + output]
+            self.assertIsInstance(instance, Place)
 
     def test_create_kwargs_float(self):
         """ """
@@ -82,6 +97,8 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['latitude'], 3.14)
+            instance = storage.all()['Place.' + output]
+            self.assertIsInstance(instance, Place)
 
     def test_create_kwargs_str_with_space(self):
         """ """
@@ -93,6 +110,8 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['name'], 'New York')
+            instance = storage.all()['Place.' + output]
+            self.assertIsInstance(instance, Place)
 
     def test_create_kwargs_types(self):
         """ """
@@ -105,6 +124,8 @@ class test_console(unittest.TestCase):
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(type(file['Place.' + output]['city_id']), str)
                 self.assertEqual(file['Place.' + output]['city_id'], '0001')
+            instance = storage.all()['Place.' + output]
+            self.assertIsInstance(instance, Place)
 
     def test_create_kwargs_multiple(self):
         """ """
@@ -118,3 +139,5 @@ class test_console(unittest.TestCase):
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['name'], 'California')
                 self.assertEqual(file['Place.' + output]['city_id'], '0001')
+            instance = storage.all()['Place.' + output]
+            self.assertIsInstance(instance, Place)
