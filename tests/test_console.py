@@ -60,6 +60,39 @@ class test_console(unittest.TestCase):
                 self.assertTrue('Place.' + output in file.keys())
                 with self.assertRaises(KeyError):
                     file['Place.' + output]['amenity_ids']
+    
+    def test_create_kwargs_int(self):
+        """ """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Place number_rooms=3')
+            self.assertTrue(os.path.exists('file.json'))
+            output = f.getvalue().strip()
+            with open('file.json', 'r') as f:
+                file = json.load(f)
+                self.assertTrue('Place.' + output in file.keys())
+                self.assertEqual(file['Place.' + output]['number_rooms'], 3)
+    
+    def test_create_kwargs_float(self):
+        """ """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Place latitude=3.14')
+            self.assertTrue(os.path.exists('file.json'))
+            output = f.getvalue().strip()
+            with open('file.json', 'r') as f:
+                file = json.load(f)
+                self.assertTrue('Place.' + output in file.keys())
+                self.assertEqual(file['Place.' + output]['latitude'], 3.14)
+
+    def test_create_kwargs_str_with_space(self):
+        """ """
+        with patch('sys.stdout', new=StringIO()) as f:
+            HBNBCommand().onecmd('create Place name=\"New_York\"')
+            self.assertTrue(os.path.exists('file.json'))
+            output = f.getvalue().strip()
+            with open('file.json', 'r') as f:
+                file = json.load(f)
+                self.assertTrue('Place.' + output in file.keys())
+                self.assertEqual(file['Place.' + output]['name'], 'New York')
                 
 
         
