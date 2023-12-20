@@ -25,9 +25,9 @@ class test_console(unittest.TestCase):
         """ """
         try:
             os.remove('file.json')
-        except:
+        except FileNotFoundError:
             pass
-    
+
     def test_create_default(self):
         """ """
         with patch('sys.stdout', new=StringIO()) as f:
@@ -37,7 +37,7 @@ class test_console(unittest.TestCase):
             with open('file.json', 'r') as f:
                 file = json.load(f)
                 self.assertTrue('BaseModel.' + output in file.keys())
-    
+
     def test_create_kwargs_correct(self):
         """ """
         with patch('sys.stdout', new=StringIO()) as f:
@@ -48,7 +48,7 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['name'], 'California')
-    
+
     def test_create_kwargs_incorrect(self):
         """ """
         with patch('sys.stdout', new=StringIO()) as f:
@@ -60,7 +60,7 @@ class test_console(unittest.TestCase):
                 self.assertTrue('Place.' + output in file.keys())
                 with self.assertRaises(KeyError):
                     file['Place.' + output]['amenity_ids']
-    
+
     def test_create_kwargs_int(self):
         """ """
         with patch('sys.stdout', new=StringIO()) as f:
@@ -71,7 +71,7 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['number_rooms'], 3)
-    
+
     def test_create_kwargs_float(self):
         """ """
         with patch('sys.stdout', new=StringIO()) as f:
@@ -93,7 +93,7 @@ class test_console(unittest.TestCase):
                 file = json.load(f)
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['name'], 'New York')
-    
+
     def test_create_kwargs_types(self):
         """ """
         with patch('sys.stdout', new=StringIO()) as f:
@@ -109,7 +109,8 @@ class test_console(unittest.TestCase):
     def test_create_kwargs_multiple(self):
         """ """
         with patch('sys.stdout', new=StringIO()) as f:
-            HBNBCommand().onecmd('create Place name=\"California\" city_id=\"0001\"')
+            HBNBCommand().onecmd('create Place name=\"California\"\
+                                  city_id=\"0001\"')
             self.assertTrue(os.path.exists('file.json'))
             output = f.getvalue().strip()
             with open('file.json', 'r') as f:
@@ -117,8 +118,3 @@ class test_console(unittest.TestCase):
                 self.assertTrue('Place.' + output in file.keys())
                 self.assertEqual(file['Place.' + output]['name'], 'California')
                 self.assertEqual(file['Place.' + output]['city_id'], '0001')
-
-                
-
-        
-
