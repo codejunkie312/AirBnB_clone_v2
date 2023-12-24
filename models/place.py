@@ -19,12 +19,14 @@ place_amenity = Table(
         nullable=False
         ),
     Column('amenity_id',
-            String(60),
-            ForeignKey('amenities.id'),
-            primary_key=True,
-            nullable=False
-            )
+           String(60),
+           ForeignKey('amenities.id'),
+           primary_key=True,
+           nullable=False
+           )
 )
+
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = 'places'
@@ -54,7 +56,7 @@ class Place(BaseModel, Base):
             if review.place_id == self.id:
                 reviews_list.append(review)
         return reviews_list
-    
+
     @property
     def amenities(self):
         """Getter for amenities"""
@@ -65,7 +67,7 @@ class Place(BaseModel, Base):
             if amenity.id in self.amenity_ids:
                 amenities_list.append(amenity)
         return amenities_list
-    
+
     @amenities.setter
     def amenities(self, obj):
         """Setter for amenities"""
