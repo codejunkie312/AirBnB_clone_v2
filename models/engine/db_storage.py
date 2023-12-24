@@ -45,9 +45,6 @@ class DBStorage:
 
     def new(self, obj):
         """Add the object to the current database session"""
-        print("###############")
-        print(obj)
-        print("###############")
         self.__session.add(obj)
 
     def save(self):

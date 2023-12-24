@@ -131,7 +131,6 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) == 1:
             new_instance = HBNBCommand.classes[args[0]]()
         else:
-            new_instance = HBNBCommand.classes[args[0]]()
             for arg in args[1:]:
                 arg = arg.split('=')
                 if arg[0] not in HBNBCommand.classes[args[0]].__dict__:
@@ -145,10 +144,10 @@ class HBNBCommand(cmd.Cmd):
                     arg[1] = int(arg[1])
                 if type(arg[1]) is not HBNBCommand.types[arg[0]]:
                     continue
-                setattr(new_instance, arg[0], arg[1])
+                kwargs = {arg[0]: arg[1]}
+                new_instance = HBNBCommand.classes[args[0]](**kwargs)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
