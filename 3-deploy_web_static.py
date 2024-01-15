@@ -43,3 +43,11 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
+
+
+def deploy():
+    """Function to deploy"""
+    path = do_pack()
+    if not path:
+        return False
+    return do_deploy(path)
