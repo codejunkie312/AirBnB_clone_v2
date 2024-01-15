@@ -45,6 +45,18 @@ def do_deploy(archive_path):
         return False
 
 
+def do_clean(number=0):
+    """Function to clean"""
+    number = int(number)
+    if number == 0 or number == 1:
+        number = 2
+    else:
+        number += 1
+    local('cd versions; ls -t | tail -n +{} | xargs rm -rf --'.format(number))
+    run('cd /data/web_static/releases; ls -t | tail -n +{} | xargs rm -rf --'
+        .format(number))
+
+
 def deploy():
     """Function to deploy"""
     path = do_pack()
