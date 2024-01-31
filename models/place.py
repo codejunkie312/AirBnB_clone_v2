@@ -17,7 +17,7 @@ if models.storage_type == "db":
             'place_id',
             String(60),
             ForeignKey('places.id', ondelete='CASCADE',
-                       ondelete='CASCADE'),
+                       onupdate='CASCADE'),
             primary_key=True),
         Column('amenity_id',
             String(60),
@@ -30,8 +30,8 @@ class Place(BaseModel, Base):
     """ A place to stay """
     if models.storage_type == "db":
         __tablename__ = 'places'
-        city_id = Column(String(60), ForeignKey(City.id), nullable=False)
-        user_id = Column(String(60), ForeignKey(User.id), nullable=False)
+        city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
+        user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
         name = Column(String(128), nullable=False)
         description = Column(String(1024))
         number_rooms = Column(Integer, default=0, nullable=False)

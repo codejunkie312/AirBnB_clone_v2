@@ -9,8 +9,6 @@ user, password, host, database = (getenv('HBNB_MYSQL_USER'),
                                   getenv('HBNB_MYSQL_PWD'),
                                   getenv('HBNB_MYSQL_HOST'),
                                   getenv('HBNB_MYSQL_DB'))
-
-
 class DBStorage:
     """This class manages storage of hbnb models in DB"""
     __engine = None
@@ -21,28 +19,24 @@ class DBStorage:
         url = 'mysql+mysqldb://{}:{}@{}:3306/{}'\
             .format(user, password, host, database)
         self.__engine = create_engine(url, pool_pre_ping=True)
+        Base.metadata.create_all(self.__engine)
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """Query on the current database session"""
-        from console import HBNBCommand
+        from console import classes
 
-        classes = HBNBCommand.classes
         new_dict = {}
-        session = self.__session
-        cls_str = str(cls).split(".")[2][:-2]
-        if cls:
-            for instance in session.query(classes[cls_str]).all():
-                new_dict[cls_str + '.' + instance.id] = instance
-            return new_dict
-        else:
-            for key, value in classes.items():
-                if key == 'BaseModel':
-                    continue
-                for instance in session.query(value).all():
-                    new_dict[key + '.' + instance.id] = instance
-            return new_dict
+        for c in classes:
+            if cls is None or cls is classes[c] or cls is c:
+                class_str = classes[c]
+                print(class_str)
+                objs = self.__session.query(classes[c]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    new_dict[key] = obj
+        return new_dict
 
     def new(self, obj):
         """Add the object to the current database session"""

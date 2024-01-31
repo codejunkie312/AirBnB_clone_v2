@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
 import uuid
-import models
+from os import getenv
 from datetime import datetime
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 
 
 time_format = "%Y-%m-%dT%H:%M:%S.%f"
+storage_type = getenv("HBNB_TYPE_STORAGE")
 
-if models.storage_type == "db":
+if storage_type == "db":
     Base = declarative_base()
 else:
     Base = object
@@ -17,9 +18,8 @@ else:
 
 class BaseModel:
     """A base class for all hbnb models"""
-    if models.storage_type == "db":
-        id = Column(String(60), primary_key=True,
-                    unique=True, nullable=False, default=str(uuid.uuid4()))
+    if storage_type == "db":
+        id = Column(String(60), primary_key=True)
         created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
         updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
 
@@ -51,9 +51,11 @@ class BaseModel:
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
+        from models import storage
+
         self.updated_at = datetime.utcnow()
-        models.storage.new(self)
-        models.storage.save()
+        storage.new(self)
+        storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
@@ -65,11 +67,13 @@ class BaseModel:
         new_dict["__class__"] = self.__class__.__name__
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
-        if models.storage_type == "db":
+        if storage_type == "db":
             if "password" in new_dict:
                 del new_dict["password"]
         return new_dict
 
     def delete(self):
         """Deletes current instance from storage."""
-        models.storage.delete(self)
+        from models import storage
+
+        storage.delete(self)
