@@ -19,9 +19,11 @@ if models.storage_type == "db":
             ForeignKey('places.id', ondelete='CASCADE',
                        onupdate='CASCADE'),
             primary_key=True),
-        Column('amenity_id',
+        Column(
+            'amenity_id',
             String(60),
-            ForeignKey('amenities.id', ondelete='CASCADE',
+            ForeignKey('amenities.id',
+                       ondelete='CASCADE',
                        onupdate='CASCADE'),
             primary_key=True))
 
@@ -40,8 +42,10 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, default=0, nullable=False)
         latitude = Column(Float)
         longitude = Column(Float)
-        amenities = relationship("Amenity", secondary="place_amenity",
-                                viewonly=False, backref="place_amenities")
+        amenities = relationship("Amenity",
+                                 secondary="place_amenity",
+                                 viewonly=False,
+                                 backref="place_amenities")
         reviews = relationship("Review", backref="place")
     else:
         city_id = ""
@@ -55,11 +59,11 @@ class Place(BaseModel, Base):
         latitude = 0.0
         longitude = 0.0
         amenity_ids = []
-    
+
     def __init__(self, *args, **kwargs):
         """constructor"""
         super().__init__(*args, **kwargs)
-    
+
     if models.storage_type != "db":
         @property
         def reviews(self):
