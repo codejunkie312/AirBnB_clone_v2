@@ -9,6 +9,8 @@ user, password, host, database = (getenv('HBNB_MYSQL_USER'),
                                   getenv('HBNB_MYSQL_PWD'),
                                   getenv('HBNB_MYSQL_HOST'),
                                   getenv('HBNB_MYSQL_DB'))
+
+
 class DBStorage:
     """This class manages storage of hbnb models in DB"""
     __engine = None
